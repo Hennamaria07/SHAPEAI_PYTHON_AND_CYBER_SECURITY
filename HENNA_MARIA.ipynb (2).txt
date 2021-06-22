@@ -1,0 +1,118 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "name": "HENNA MARIA",
+      "provenance": []
+    },
+    "kernelspec": {
+      "display_name": "Python 3",
+      "name": "python3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "huV89YK3oz2r"
+      },
+      "source": [
+        " \n",
+        "import requests\n",
+        " \n",
+        "from datetime import datetime\n",
+        " \n",
+        "api_key = '50cc1a5dffcd7b06f853af0ce318be4d'\n",
+        " \n",
+        "location = input(\"Enter the city name: \")\n",
+        " \n",
+        "complete_api_link = \"https://api.openweathermap.org/data/2.5/weather?q=\"+location+\"&appid=\"+api_key\n",
+        " \n",
+        "api_link = requests.get(complete_api_link)\n",
+        " \n",
+        "api_data = api_link.json()\n",
+        " \n",
+        "temp_city = ((api_data['main']['temp']) - 273.15)\n",
+        " \n",
+        "weather_desc = api_data['weather'][0]['description']\n",
+        " \n",
+        "hmdt = api_data['main']['humidity']\n",
+        " \n",
+        "wind_spd = api_data['wind' ]['speed']\n",
+        " \n",
+        "date_time = datetime.now() .strftime (\"%d %b %Y | % I: %M:%S %p\")\n",
+        "print (\"-----------------------------------------------------------------\")\n",
+        " \n",
+        "print (\"Weather Status for- {} Il {}\".format(location.upper(), date_time))\n",
+        " \n",
+        "print(\"------------------------------------------------------------------\")\n",
+        " \n",
+        "print (\"Current temperature is:{:.2f} deg C\".format(temp_city))\n",
+        " \n",
+        "print (\"Current weather desc, :\",weather_desc)\n",
+        " \n",
+        "print (\"Current Humidity       :\", hmdt, '%')\n",
+        " \n",
+        "print (\"Current wind speed     :\",wind_spd, 'kmph')"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 386
+        },
+        "id": "0YaBDGjG_KTt",
+        "outputId": "a8bde6bd-e07f-4fb2-d3f4-bd23942ce703"
+      },
+      "source": [
+        " \n",
+        "if __name__ == \"__main__\":\n",
+        "    # Define file path\n",
+        "    dataDir = r\"G:\\2020\\weather data\\2019\\EVP\" \n",
+        "    dataDir_out = r\"G:\\2020\\weather data\\2019\\EVP\"\n",
+        " \n",
+        "    sidArr = [\"53463\"]  # Station number list\n",
+        "    fields = [\"TEM\", \"TMN\", \"TMX\", \"PRE\", \"RHU\", \"WIN\", \"PRS\", \"SSD\"]  # Optional extraction variable list\n",
+        "    START = \"2019-01-01\"  # Start date\n",
+        "    END = \"2019-12-31\"  # End date\n",
+        " \n",
+        "    period = [START.split('-')[0] + START.split('-')[1], END.split('-')[0] + END.split('-')[1]]\n",
+        "    period_days = GetDateArr_strdays(START, END)\n",
+        "    days = []\n",
+        " \n",
+        "    # Extract data site by site\n",
+        "    for sid in sidArr:\n",
+        "        print(sid)\n",
+        " \n",
+        "        # Calculate the number of initial search lines to improve the extraction speed\n",
+        "        sr = sidArr.index(sid) * 28\n",
+        " \n",
+        "        c = ClimateData(dataDir, dataDir_out, int(sid), fields, period, days)\n",
+        "        c.ExtractData(sr=sr)\n",
+        "        c.SaveData(period_days, avg=False, d=False)"
+      ],
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "error",
+          "ename": "NameError",
+          "evalue": "ignored",
+          "traceback": [
+            "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
+            "\u001b[0;31mNameError\u001b[0m                                 Traceback (most recent call last)",
+            "\u001b[0;32m<ipython-input-75-14f438910651>\u001b[0m in \u001b[0;36m<module>\u001b[0;34m()\u001b[0m\n\u001b[1;32m     11\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     12\u001b[0m    \u001b[0mperiod\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0;34m[\u001b[0m\u001b[0mSTART\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0msplit\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m'-'\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0;36m0\u001b[0m\u001b[0;34m]\u001b[0m \u001b[0;34m+\u001b[0m \u001b[0mSTART\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0msplit\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m'-'\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0;36m1\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mEND\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0msplit\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m'-'\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0;36m0\u001b[0m\u001b[0;34m]\u001b[0m \u001b[0;34m+\u001b[0m \u001b[0mEND\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0msplit\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m'-'\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0;36m1\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m---> 13\u001b[0;31m    \u001b[0mperiod_days\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mGetDateArr_strdays\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mSTART\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mEND\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m     14\u001b[0m    \u001b[0mdays\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0;34m[\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     15\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;31mNameError\u001b[0m: name 'GetDateArr_strdays' is not defined"
+          ]
+        }
+      ]
+    }
+  ]
+}
